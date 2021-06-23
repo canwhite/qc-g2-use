@@ -49,6 +49,16 @@ export default {
         { year: '1959 年', sales: 38},
         { year: '1960 年', sales: 38},
         { year: '1962 年', sales: 38},
+        { year: '1963 年', sales: 38},
+        { year: '1964 年', sales: 52},
+        { year: '1965 年', sales: 52},
+        { year: '1966 年', sales: 61},
+        { year: '1967 年', sales: 145},
+        { year: '1968 年', sales: 48},
+        { year: '1969 年', sales: 38},
+        { year: '1970 年', sales: 38},
+        { year: '1971 年', sales: 38},
+        
       ];
       //chat初始化
       const chart = new Chart({
@@ -77,10 +87,9 @@ export default {
       });
       //横轴 
       chart.scale('year',{
-        //两端留白
+        //两端留白，和剩余部分
         range:[0.1,0.9]
       });
-
       //图例的设置
       //隐藏全部图例
       /* chart.legend(false); */
@@ -90,6 +99,7 @@ export default {
       chart.legend("year",{
         position:"right"
       })
+
 
       //这部分相当于标签的出现，上边的是配置
       chart.axis('sales', {
@@ -153,33 +163,81 @@ export default {
             },
             textBackground: null,
           }, */
-
         }
-
-
-
-
-        //散点图的时候可以展示十字辅助线,雷达图和玫瑰图也有对应的配置
-        /* crosshairs:{
-          // 展示十字辅助线
-          type: 'xy',
-          // 我们还可以通过配置，在crosshairs上展示对应的数据
-          
-        } */
-
-        
-
       });
-
-
-    
+      //交互方式
       chart.interaction('active-region');
+
+
+      //图形标注
+      /* chart.annotation().arc(cfg): cfg 配置详见 API。
+      chart.annotation().line(cfg): cfg 配置详见 API。
+      chart.annotation().text(cfg): cfg 配置详见 API。
+      chart.annotation().image(cfg): cfg 配置详见 API。
+      chart.annotation().region(cfg): cfg 配置详见 API。
+      chart.annotation().dataMarker(cfg): cfg 配置详见 API。
+      chart.annotation().dataRegion(cfg): cfg 配置详见 API。
+      chart.annotation().regionFilter(cfg): cfg 配置详见 API。 */
+      chart.annotation().text(
+        {
+          content:"23333",
+          position(){
+            /* { year: '1962 年', sales: 38} */
+            return ['1962 年',38]
+          }
+        }
+      )
+
+      /* 
+      滑块按需引入
+      import Slider from '@antv/g2/lib/chart/controller/slider';
+      import { registerComponentController, Chart } from '@antv/g2/lib/core';
+      // 引入 slider 组件
+      registerComponentController('slider', Slider); */
+
+
+      //滑块全量引入不需要上边的内容，数据多的时候使用
+      /* chart.option('slider', {
+        end: 0.8,
+      }); */
+
+      /* 
+      滚动条按需引入
+      import Scrollbar from '@antv/g2/lib/chart/controller/scrollbar';
+      import { registerComponentController, Chart } from '@antv/g2/lib/core';
+      // 引入 slider 组件
+      registerComponentController('scrollbar', Scrollbar);*/
+
+      //滚动条全量引入
+      chart.option('scrollbar', {
+        // 滚动条类型： 'horizontal' / 'vertical'
+        type: 'vertical',
+      });
+      
 
       //可以对一维坐标、二维坐标或者三维坐标进行处理
       //chart.interval().position('year*sales').color("year");
       //对二维进行处理
       chart.interval()
       .position('year*sales')
+      //柱子上边或者点上边显示的数据
+      .label("year",{
+        /* 'base'，默认类型，用于直角坐标系下的图表
+        'interval'，用于 Interval 几何标记下所有图形的文本标注，比如柱状图等
+        'pie'，专用于饼图的文本标注，带有文本连接线
+        'polar'，用于极坐标系下图表的文本标注 */
+        type:'interval',
+        //标签布局，有三种文本布局的方案，主要是针对数据太密集的时候的应对方案
+        /*
+        'overlap':防遮挡，尝试向四周偏移来剔除放不下的label
+        'fixedOverlap':不改变label位置的情况下对相互重叠的label进行调整
+        'limitInShape':剔除shape容纳不了的label
+        */
+        layout: {
+            type: 'fixed-overlap',
+        },
+
+      })
       .color('year*sales',(year,sales)=>{
         if(year == "1951 年"){
           return "blue";
