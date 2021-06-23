@@ -32,6 +32,8 @@ export default {
     this.setLine();
     //basicLine
     this.setBasicLine();
+    //分组柱
+
 
 
   },
@@ -51,8 +53,7 @@ export default {
       //chat初始化
       const chart = new Chart({
         container: 'container',
-        autoFit: false,//如果给true，可以不给宽度
-        width:500,
+        autoFit: true,//如果给true，可以不给宽度
         height: 500,
       });
       //设置数据
@@ -100,13 +101,70 @@ export default {
         showCrosshairs:true,//展示toolTip辅助线,中间多条线
         //不展示markers那个点
         showMarkers:false,
-        //如果一个柱子展示两组数据,合并同类项，可以将showtip的shared属性开启
+        //如果一个柱子有两组数据对比,合并同类项，可以将showtip的shared属性开启
         //同时结合 'active-region' 交互行为, 达到这一效果
         //shared:true,
 
+        //十字星线一般散点图用，雷达图的类似
+        crosshairs:{
+          //十字星线
+          type:"xy",
+          //在crosshairs上显示对应的数据
+          //在不同的坐标系里边效果还是不一样的
+          text:(type,defaultText,items)=>{
+            const color = items[0].color;
+            if(type == 'x'){
+              return{
+                offset:5,
+                position:'center',
+                content:"￥" + defaultText,
+                style:{
+                  textAlign:"center",
+                  textBaseline:"top",
+                  fontSize:14,
+                  fontWeight:'bold'
+                } 
+              }
+            }
+            return{
+              offset: 5,
+              content: defaultText + ' kg',
+              style: {
+                textAlign: 'end',
+                fontSize: 14,
+                fontWeight: 'bold',
+              },
+            }
+          }
+          //补充一个玫瑰图
+          /* crosshairs: {
+            line: {
+              style: {
+                lineDash: [2],
+              },
+            },
+            text: {
+              position: 'end',
+              offset: 5,
+              autoRotate: true,
+              style: {
+                fontSize: 14,
+              },
+            },
+            textBackground: null,
+          }, */
+
+        }
+
+
+
+
         //散点图的时候可以展示十字辅助线,雷达图和玫瑰图也有对应的配置
         /* crosshairs:{
-          type: 'xy', // 展示十字辅助线
+          // 展示十字辅助线
+          type: 'xy',
+          // 我们还可以通过配置，在crosshairs上展示对应的数据
+          
         } */
 
         
@@ -308,8 +366,6 @@ export default {
     }
 
   },
-
-
 
 
 }
