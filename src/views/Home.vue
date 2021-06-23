@@ -97,7 +97,20 @@ export default {
 
       //提示信息
       chart.tooltip({
-        showMarkers: false
+        showCrosshairs:true,//展示toolTip辅助线,中间多条线
+        //不展示markers那个点
+        showMarkers:false,
+        //如果一个柱子展示两组数据,合并同类项，可以将showtip的shared属性开启
+        //同时结合 'active-region' 交互行为, 达到这一效果
+        //shared:true,
+
+        //散点图的时候可以展示十字辅助线,雷达图和玫瑰图也有对应的配置
+        /* crosshairs:{
+          type: 'xy', // 展示十字辅助线
+        } */
+
+        
+
       });
 
 
@@ -248,7 +261,6 @@ export default {
         .position('month*temperature')
         .color('city')
         .shape('circle');
-
       chart.render();
 
     },
